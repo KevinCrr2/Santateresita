@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos - Panadería Santa Teresita</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background:#f6f6f4; }
+  .order-card { transition:.15s ease; }
+  .order-card:hover { transform:translateY(-1px); box-shadow:0 8px 22px rgba(0,0,0,.08); }
+</style>
+</head>
+<body class="min-h-screen text-slate-900">
+<header class="bg-white border-b sticky top-0 z-30">
+  <div class="w-full px-5 md:px-8 py-4 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+    <div>
+      <h1 class="text-xl md:text-2xl font-bold">Pedidos · Panadería Santa Teresita</h1>
+      <p class="text-sm text-slate-500">Elegí una sucursal para ver y gestionar sus pedidos.</p>
+    </div>
+    <button onclick="cargarPedidos()" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold">
+      ↻ Actualizar
+    </button>
+  </div>
+</header>
+
+<main class="w-full px-4 md:px-8 py-5">
+  <div id="config-warning" class="hidden mb-5 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-900 text-sm">
+    Configurá <b>SUPABASE_URL</b> y <b>SUPABASE_ANON_KEY</b> dentro de este archivo.
+  </div>
+
+  <!-- Selector de sucursal -->
+  <section class="bg-white rounded-2xl border shadow-sm p-4 md:p-5 mb-5">
+    <div class="flex flex-col md:flex-row md:items-center gap-3">
+      <div class="shrink-0">
+        <div class="text-xs uppercase tracking-wide text-slate-500 font-bold">Sucursal</div>
+        <div class="text-sm text-slate-500 mt-1">Elegí qué sucursal querés ver</div>
+      </div>
+
+      <div class="flex-1">
+        <select
+          id="branch-selector"
+          onchange="seleccionarSucursal(this.value)"
+          class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm md:text-base font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
+        >
+          <option value="todas">🏪 Todas las sucursales</option>
+          <option value="centro">📍 Sucursal Centro</option>
+          <option value="norte">📍 Sucursal Norte</option>
+          <option value="pueblo">📍 Sucursal Pueblo Nuevo</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+    <div class="bg-white rounded-2xl border p-4">
+      <div class="text-xs text-slate-500">Pedidos pendientes</div>
+      <div id="stat-pendientes" class="text-2xl font-bold mt-1">0</div>
+    </div>
+    <div class="bg-white rounded-2xl border p-4">
+      <div class="text-xs text-slate-500">Pedidos listos</div>
+      <div id="stat-listos" class="text-2xl font-bold mt-1">0</div>
+    </div>
+    <div class="bg-white rounded-2xl border p-4">
+      <div class="text-xs text-slate-500">Pedidos transferidos</div>
+      <div id="stat-transferidos" class="text-2xl font-bold mt-1">0</div>
+    </div>
+    <div class="bg-white rounded-2xl border p-4">
+      <div class="text-xs text-slate-500">Total mostrado</div>
+      <div id="stat-total" class="text-2xl font-bold mt-1">$0</div>
+    </div>
+  </section>
+
+  <div id="loading" class="text-center py-10 text-slate-500">Cargando pedidos...</div>
+  <div id="empty" class="hidden text-center py-14 bg-white rounded-2xl border">
+    <div class="text-4xl mb-3">📭</div>
+    <div class="font-bold text-lg">No hay pedidos para esta sucursal</div>
+    <div class="text-sm text-slate-500 mt-1">Los pedidos nuevos aparecerán automáticamente.</div>
+  </div>
+
+  <!-- Una sola grilla que ocupa todo el ancho -->
+  <div id="orders-grid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"></div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://rmfgtifajffxbvcgfuep.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_a_Y_DO0ZDmo_dS4_T2RugA_kWRjMFWT";
+
+const sucursales = {
+  centro: { nombre: "Sucursal Centro", direccion: "Av. San Martín 1420" },
+  norte:  { nombre: "Sucursal Norte", direccion: "Av. Colón 2850" },
+  pueblo: { nombre: "Sucursal Pueblo Nuevo", direccion: "Rivadavia 1940" }
+};
+
+let supabaseCliente = null;
+let pedidos = [];
+let sucursalSeleccionada = "todas";
+
+if (SUPABASE_URL.startsWith("http") && !SUPABASE_ANON_KEY.startsWith("PEGAR")) {
+  supabaseCliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+  document.getElementById("config-warning").classList.remove("hidden");
+}
+
+function seleccionarSucursal(id) {
+  sucursalSeleccionada = id;
+
+  const selector = document.getElementById("branch-selector");
+  if (selector) {
+    selector.value = id;
+  }
+
+  renderPedidos();
+}
+
+function esc(text) {
+  return String(text ?? "")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function moneda(v) {
+  return new Intl.NumberFormat("es-AR", {
+    style:"currency", currency:"ARS", maximumFractionDigits:0
+  }).format(Number(v) || 0);
+}
+
+function fecha(v) {
+  if (!v) return "";
+  return new Date(v).toLocaleString("es-AR", {
+    day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"
+  });
+}
+
+function pedidosVisibles() {
+  if (sucursalSeleccionada === "todas") return pedidos;
+  return pedidos.filter(p => p.sucursal_id === sucursalSeleccionada);
+}
+
+async function cargarPedidos() {
+  if (!supabaseCliente) return;
+
+  document.getElementById("loading").classList.remove("hidden");
+
+  const { data, error } = await supabaseCliente
+    .from("pedidos")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  document.getElementById("loading").classList.add("hidden");
+
+  if (error) {
+    console.error(error);
+    alert("No se pudieron cargar los pedidos: " + error.message);
+    return;
+  }
+
+  pedidos = data || [];
+  renderPedidos();
+}
+
+function renderPedidos() {
+  const visibles = pedidosVisibles();
+  const grid = document.getElementById("orders-grid");
+  const empty = document.getElementById("empty");
+
+  document.getElementById("stat-pendientes").textContent =
+    visibles.filter(p => p.estado === "pendiente").length;
+  document.getElementById("stat-listos").textContent =
+    visibles.filter(p => p.estado === "listo").length;
+  document.getElementById("stat-transferidos").textContent =
+    visibles.filter(p => p.estado === "transferido").length;
+  document.getElementById("stat-total").textContent =
+    moneda(visibles.reduce((s,p) => s + Number(p.total || 0), 0));
+
+  grid.innerHTML = "";
+
+  if (!visibles.length) {
+    grid.classList.add("hidden");
+    empty.classList.remove("hidden");
+    return;
+  }
+
+  empty.classList.add("hidden");
+  grid.classList.remove("hidden");
+
+  visibles.forEach(p => {
+    const items = Array.isArray(p.items) ? p.items : [];
+    const destino = p.transferido_a ? sucursales[p.transferido_a]?.nombre || p.transferido_a : "";
+
+    const card = document.createElement("article");
+    card.className = "order-card bg-white rounded-2xl border shadow-sm overflow-hidden";
+
+    card.innerHTML = `
+      <div class="p-4 border-b">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="font-bold text-lg">${esc(p.cliente_nombre)}</div>
+            <div class="text-xs text-slate-500">${fecha(p.created_at)}</div>
+          </div>
+          <span class="text-xs font-bold px-2.5 py-1 rounded-full ${badgeClase(p.estado)}">
+            ${esc(estadoTexto(p.estado))}
+          </span>
+        </div>
+        <div class="mt-3 text-sm space-y-1">
+          <div>🏪 ${esc(p.sucursal_nombre)}</div>
+          <div>🛵 ${esc(p.modalidad)}</div>
+          ${p.horario ? `<div>🕒 ${esc(p.horario)}</div>` : ""}
+          ${p.direccion ? `<div>📍 ${esc(p.direccion)}</div>` : ""}
+        </div>
+      </div>
+
+      <div class="p-4">
+        <div class="text-xs uppercase tracking-wide text-slate-500 font-bold mb-2">Pedido</div>
+        <div class="space-y-1.5">
+          ${items.map(i => `
+            <div class="flex justify-between gap-3 text-sm">
+              <span>${esc(i.cantidad)} × ${esc(i.nombre)}</span>
+              <span class="font-semibold">${moneda(i.subtotal ?? ((Number(i.precio)||0)*(Number(i.cantidad)||0)))}</span>
+            </div>
+          `).join("")}
+        </div>
+
+        ${p.notas ? `
+          <div class="mt-3 rounded-xl bg-slate-50 p-3 text-sm">
+            <b>Notas:</b> ${esc(p.notas)}
+          </div>` : ""}
+
+        ${destino ? `
+          <div class="mt-3 rounded-xl bg-blue-50 text-blue-900 p-3 text-sm">
+            ↗️ Enviado a <b>${esc(destino)}</b>
+          </div>` : ""}
+
+        <div class="flex justify-between items-center border-t mt-4 pt-4">
+          <span class="font-bold">Total</span>
+          <span class="font-bold text-lg">${moneda(p.total)}</span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-2 mt-4">
+          ${p.estado !== "listo" && p.estado !== "transferido" ? `
+            <button onclick="marcarListo('${p.id}')"
+              class="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 font-semibold">
+              ✓ Marcar listo
+            </button>` : ""}
+
+          ${p.estado !== "transferido" ? `
+            <button onclick="abrirTransferencia('${p.id}')"
+              class="w-full rounded-xl border border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-800 py-2.5 font-semibold">
+              ↗️ Enviar a otra sucursal
+            </button>` : ""}
+
+          <button onclick="eliminarPedido('${p.id}')"
+            class="w-full rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 py-2.5 font-semibold">
+            🗑 Eliminar
+          </button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function badgeClase(estado) {
+  if (estado === "listo") return "bg-emerald-100 text-emerald-700";
+  if (estado === "transferido") return "bg-blue-100 text-blue-700";
+  return "bg-amber-100 text-amber-700";
+}
+
+function estadoTexto(estado) {
+  if (estado === "listo") return "Listo";
+  if (estado === "transferido") return "Transferido";
+  return "Pendiente";
+}
+
+async function marcarListo(id) {
+  const { error } = await supabaseCliente
+    .from("pedidos")
+    .update({ estado:"listo" })
+    .eq("id", id);
+
+  if (error) return alert(error.message);
+  await cargarPedidos();
+}
+
+async function abrirTransferencia(id) {
+  const pedido = pedidos.find(p => p.id === id);
+  if (!pedido) return;
+
+  const opciones = Object.entries(sucursales)
+    .filter(([id]) => id !== pedido.sucursal_id)
+    .map(([id, s]) => `${id}: ${s.nombre}`)
+    .join("\\n");
+
+  const destino = prompt(
+    "¿A qué sucursal querés enviar este pedido?\\n\\n" +
+    opciones +
+    "\\n\\nEscribí: centro, norte o pueblo"
+  );
+
+  if (!destino) return;
+
+  const destinoNormalizado = destino.trim().toLowerCase();
+  if (!sucursales[destinoNormalizado] || destinoNormalizado === pedido.sucursal_id) {
+    alert("Sucursal no válida.");
+    return;
+  }
+
+  const confirmar = confirm(
+    `Enviar el pedido de ${pedido.cliente_nombre} desde ${pedido.sucursal_nombre} a ${sucursales[destinoNormalizado].nombre}?`
+  );
+  if (!confirmar) return;
+
+  const { error } = await supabaseCliente
+    .from("pedidos")
+    .update({
+      sucursal_id: destinoNormalizado,
+      sucursal_nombre: sucursales[destinoNormalizado].nombre,
+      transferido_a: destinoNormalizado,
+      transferido_desde: pedido.sucursal_id,
+      estado: "pendiente"
+    })
+    .eq("id", id);
+
+  if (error) {
+    alert("No se pudo transferir: " + error.message);
+    return;
+  }
+
+  await cargarPedidos();
+}
+
+async function eliminarPedido(id) {
+  if (!confirm("¿Eliminar este pedido?")) return;
+
+  const { error } = await supabaseCliente
+    .from("pedidos")
+    .delete()
+    .eq("id", id);
+
+  if (error) return alert(error.message);
+  await cargarPedidos();
+}
+
+function escucharCambios() {
+  if (!supabaseCliente) return;
+
+  supabaseCliente
+    .channel("pedidos-sucursales")
+    .on("postgres_changes",
+      { event:"*", schema:"public", table:"pedidos" },
+      () => cargarPedidos()
+    )
+    .subscribe();
+}
+
+seleccionarSucursal("todas");
+cargarPedidos();
+escucharCambios();
+</script>
+</body>
+</html>
