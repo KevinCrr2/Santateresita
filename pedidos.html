@@ -45,9 +45,9 @@
           class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm md:text-base font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900"
         >
           <option value="todas">🏪 Todas las sucursales</option>
-          <option value="centro">📍 Sucursal Centro</option>
-          <option value="norte">📍 Sucursal Norte</option>
-          <option value="pueblo">📍 Sucursal Pueblo Nuevo</option>
+          <option value="centro">📍 Santa Teresita I</option>
+          <option value="norte">📍 Santa Teresita II</option>
+          <option value="pueblo">📍 Santa Teresita III</option>
         </select>
       </div>
     </div>
@@ -83,14 +83,82 @@
   <div id="orders-grid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"></div>
 </main>
 
+
+<!-- Modal para transferir productos seleccionados -->
+<div id="transfer-modal" class="hidden fixed inset-0 z-50 bg-black/50 p-4 overflow-y-auto">
+  <div class="min-h-full flex items-center justify-center">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden">
+      <div class="p-5 border-b flex items-start justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold">Enviar productos a otra sucursal</h2>
+          <p id="transfer-subtitle" class="text-sm text-slate-500 mt-1"></p>
+        </div>
+        <button type="button" onclick="cerrarTransferencia()" class="text-slate-500 text-2xl leading-none" aria-label="Cerrar">×</button>
+      </div>
+      <div class="p-5">
+        <label for="transfer-destination" class="block text-sm font-semibold mb-2">Sucursal de destino</label>
+        <select id="transfer-destination" class="w-full rounded-xl border border-slate-300 px-3 py-3 mb-5"></select>
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <h3 class="font-bold">¿Qué productos querés enviar?</h3>
+          <button type="button" onclick="seleccionarTodoTransferencia(true)" class="text-sm text-blue-700 font-semibold">Todo el pedido</button>
+        </div>
+        <p class="text-sm text-slate-500 mb-3">Elegí la cantidad de cada producto. Lo que no envíes queda en la sucursal original.</p>
+        <div id="transfer-items" class="space-y-3"></div>
+        <div class="mt-5 rounded-xl bg-slate-50 p-4 flex justify-between gap-3">
+          <span class="text-sm text-slate-600">Subtotal de lo seleccionado</span>
+          <strong id="transfer-total">$0</strong>
+        </div>
+      </div>
+      <div class="p-5 border-t flex flex-col-reverse sm:flex-row gap-2 sm:justify-end">
+        <button type="button" onclick="cerrarTransferencia()" class="rounded-xl border px-4 py-2.5 font-semibold">Cancelar</button>
+        <button type="button" id="transfer-submit" onclick="confirmarTransferencia()" class="rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 font-semibold">Enviar selección</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal para transferir productos seleccionados -->
+<div id="transfer-modal" class="hidden fixed inset-0 z-50 bg-black/50 p-4 overflow-y-auto">
+  <div class="min-h-full flex items-center justify-center">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden">
+      <div class="p-5 border-b flex items-start justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-bold">Enviar productos a otra sucursal</h2>
+          <p id="transfer-subtitle" class="text-sm text-slate-500 mt-1"></p>
+        </div>
+        <button type="button" onclick="cerrarTransferencia()" class="text-slate-500 text-2xl leading-none" aria-label="Cerrar">×</button>
+      </div>
+      <div class="p-5">
+        <label for="transfer-destination" class="block text-sm font-semibold mb-2">Sucursal de destino</label>
+        <select id="transfer-destination" class="w-full rounded-xl border border-slate-300 px-3 py-3 mb-5"></select>
+        <div class="flex items-center justify-between gap-3 mb-2">
+          <h3 class="font-bold">¿Qué productos querés enviar?</h3>
+          <button type="button" onclick="seleccionarTodoTransferencia(true)" class="text-sm text-blue-700 font-semibold">Todo el pedido</button>
+        </div>
+        <p class="text-sm text-slate-500 mb-3">Elegí la cantidad de cada producto. Lo que no envíes queda en la sucursal original.</p>
+        <div id="transfer-items" class="space-y-3"></div>
+        <div class="mt-5 rounded-xl bg-slate-50 p-4 flex justify-between gap-3">
+          <span class="text-sm text-slate-600">Subtotal de lo seleccionado</span>
+          <strong id="transfer-total">$0</strong>
+        </div>
+      </div>
+      <div class="p-5 border-t flex flex-col-reverse sm:flex-row gap-2 sm:justify-end">
+        <button type="button" onclick="cerrarTransferencia()" class="rounded-xl border px-4 py-2.5 font-semibold">Cancelar</button>
+        <button type="button" id="transfer-submit" onclick="confirmarTransferencia()" class="rounded-xl bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 font-semibold">Enviar selección</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL = "https://rmfgtifajffxbvcgfuep.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_a_Y_DO0ZDmo_dS4_T2RugA_kWRjMFWT";
 
 const sucursales = {
-  centro: { nombre: "Sucursal Centro", direccion: "Av. San Martín 1420" },
-  norte:  { nombre: "Sucursal Norte", direccion: "Av. Colón 2850" },
-  pueblo: { nombre: "Sucursal Pueblo Nuevo", direccion: "Rivadavia 1940" }
+  centro: { nombre: "Santa Teresita I", direccion: "Rondeau 6550" },
+  norte:  { nombre: "Santa Teresita II", direccion: "Av. Calfucura 1401" },
+  pueblo: { nombre: "Santa Teresita III", direccion: "Av. Centenario 367" }
 };
 
 let supabaseCliente = null;
@@ -284,51 +352,133 @@ async function marcarListo(id) {
   await cargarPedidos();
 }
 
-async function abrirTransferencia(id) {
+let pedidoEnTransferencia = null;
+
+function subtotalItem(item) {
+  const cantidad = Number(item.cantidad) || 0;
+  const subtotal = Number(item.subtotal);
+  if (Number.isFinite(subtotal)) return subtotal;
+  return (Number(item.precio) || 0) * cantidad;
+}
+function precioUnitarioItem(item) {
+  const cantidad = Number(item.cantidad) || 0;
+  return cantidad ? subtotalItem(item) / cantidad : (Number(item.precio) || 0);
+}
+function abrirTransferencia(id) {
   const pedido = pedidos.find(p => p.id === id);
   if (!pedido) return;
+  const items = Array.isArray(pedido.items) ? pedido.items : [];
+  if (!items.length) return alert("Este pedido no tiene productos para transferir.");
+  pedidoEnTransferencia = pedido;
+  document.getElementById("transfer-subtitle").textContent =
+    `Pedido de ${pedido.cliente_nombre} · ${pedido.sucursal_nombre}`;
+  document.getElementById("transfer-destination").innerHTML = Object.entries(sucursales)
+    .filter(([sucursalId]) => sucursalId !== pedido.sucursal_id)
+    .map(([sucursalId, sucursal]) => `<option value="${esc(sucursalId)}">${esc(sucursal.nombre)}</option>`).join("");
+  document.getElementById("transfer-items").innerHTML = items.map((item, index) => `
+    <div class="rounded-xl border p-3 flex flex-col sm:flex-row sm:items-center gap-3">
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold">${esc(item.nombre || "Producto")}</div>
+        <div class="text-sm text-slate-500">${moneda(precioUnitarioItem(item))} c/u · Disponible: ${esc(item.cantidad)}</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <label for="transfer-qty-${index}" class="text-sm text-slate-600">Enviar</label>
+        <input id="transfer-qty-${index}" type="number" min="0" max="${Number(item.cantidad)||0}" step="any" value="0"
+          oninput="actualizarTotalTransferencia()" class="w-28 rounded-lg border border-slate-300 px-3 py-2">
+      </div>
+    </div>`).join("");
+  document.getElementById("transfer-modal").classList.remove("hidden");
+  actualizarTotalTransferencia();
+}
+function cerrarTransferencia() {
+  document.getElementById("transfer-modal").classList.add("hidden");
+  pedidoEnTransferencia = null;
+}
+function seleccionarTodoTransferencia(todo) {
+  if (!pedidoEnTransferencia) return;
+  pedidoEnTransferencia.items.forEach((item, index) => {
+    const input = document.getElementById(`transfer-qty-${index}`);
+    if (input) input.value = todo ? (Number(item.cantidad)||0) : 0;
+  });
+  actualizarTotalTransferencia();
+}
+function actualizarTotalTransferencia() {
+  if (!pedidoEnTransferencia) return;
+  let total = 0;
+  pedidoEnTransferencia.items.forEach((item, index) => {
+    const input = document.getElementById(`transfer-qty-${index}`);
+    if (!input) return;
+    const max = Number(item.cantidad)||0;
+    const cantidad = Math.max(0, Math.min(max, Number(input.value)||0));
+    input.value = cantidad;
+    total += precioUnitarioItem(item) * cantidad;
+  });
+  document.getElementById("transfer-total").textContent = moneda(total);
+}
+function prepararItemsTransferidos(items, cantidades) {
+  return items.map((item, index) => {
+    if (cantidades[index] <= 0) return null;
+    return { ...item, cantidad: cantidades[index],
+      subtotal: Math.round(precioUnitarioItem(item) * cantidades[index] * 100) / 100 };
+  }).filter(Boolean);
+}
+async function confirmarTransferencia() {
+  const pedido = pedidoEnTransferencia;
+  if (!pedido) return;
+  const items = Array.isArray(pedido.items) ? pedido.items : [];
+  const cantidades = items.map((item, index) => {
+    const input = document.getElementById(`transfer-qty-${index}`);
+    return Math.max(0, Math.min(Number(item.cantidad)||0, Number(input?.value)||0));
+  });
+  if (!cantidades.some(c => c > 0)) return alert("Elegí al menos un producto o una cantidad para enviar.");
+  const destino = document.getElementById("transfer-destination").value;
+  if (!sucursales[destino] || destino === pedido.sucursal_id) return alert("Elegí una sucursal de destino válida.");
 
-  const opciones = Object.entries(sucursales)
-    .filter(([id]) => id !== pedido.sucursal_id)
-    .map(([id, s]) => `${id}: ${s.nombre}`)
-    .join("\\n");
+  const itemsEnviados = prepararItemsTransferidos(items, cantidades);
+  const itemsRestantes = items.map((item, index) => {
+    const cantidad = (Number(item.cantidad)||0) - cantidades[index];
+    if (cantidad <= 0) return null;
+    return { ...item, cantidad, subtotal: Math.round(precioUnitarioItem(item) * cantidad * 100) / 100 };
+  }).filter(Boolean);
+  const totalEnviado = Math.round(itemsEnviados.reduce((sum, item) => sum + subtotalItem(item), 0) * 100) / 100;
+  const totalRestante = Math.round(itemsRestantes.reduce((sum, item) => sum + subtotalItem(item), 0) * 100) / 100;
+  if (!confirm(`Enviar ${itemsEnviados.length} producto(s) a ${sucursales[destino].nombre} por ${moneda(totalEnviado)}?` +
+      (itemsRestantes.length ? `\n\nEl resto quedará en ${pedido.sucursal_nombre}.` : "\n\nSe trasladará el pedido completo."))) return;
 
-  const destino = prompt(
-    "¿A qué sucursal querés enviar este pedido?\\n\\n" +
-    opciones +
-    "\\n\\nEscribí: centro, norte o pueblo"
-  );
-
-  if (!destino) return;
-
-  const destinoNormalizado = destino.trim().toLowerCase();
-  if (!sucursales[destinoNormalizado] || destinoNormalizado === pedido.sucursal_id) {
-    alert("Sucursal no válida.");
-    return;
+  const boton = document.getElementById("transfer-submit");
+  boton.disabled = true; boton.textContent = "Enviando...";
+  try {
+    if (!itemsRestantes.length) {
+      const { error } = await supabaseCliente.from("pedidos").update({
+        sucursal_id: destino, sucursal_nombre: sucursales[destino].nombre,
+        items: itemsEnviados, total: totalEnviado, transferido_a: destino,
+        transferido_desde: pedido.sucursal_id, estado: "pendiente"
+      }).eq("id", pedido.id);
+      if (error) throw error;
+    } else {
+      const { error: updateError } = await supabaseCliente.from("pedidos")
+        .update({ items: itemsRestantes, total: totalRestante }).eq("id", pedido.id);
+      if (updateError) throw updateError;
+      const nuevoPedido = { ...pedido };
+      delete nuevoPedido.id; delete nuevoPedido.created_at; delete nuevoPedido.updated_at;
+      Object.assign(nuevoPedido, {
+        sucursal_id: destino, sucursal_nombre: sucursales[destino].nombre,
+        items: itemsEnviados, total: totalEnviado, transferido_a: destino,
+        transferido_desde: pedido.sucursal_id, estado: "pendiente"
+      });
+      const { error: insertError } = await supabaseCliente.from("pedidos").insert(nuevoPedido);
+      if (insertError) {
+        await supabaseCliente.from("pedidos").update({ items: pedido.items, total: pedido.total }).eq("id", pedido.id);
+        throw insertError;
+      }
+    }
+    cerrarTransferencia();
+    await cargarPedidos();
+  } catch (error) {
+    alert("No se pudo transferir el pedido: " + (error.message || error));
+  } finally {
+    boton.disabled = false; boton.textContent = "Enviar selección";
   }
-
-  const confirmar = confirm(
-    `Enviar el pedido de ${pedido.cliente_nombre} desde ${pedido.sucursal_nombre} a ${sucursales[destinoNormalizado].nombre}?`
-  );
-  if (!confirmar) return;
-
-  const { error } = await supabaseCliente
-    .from("pedidos")
-    .update({
-      sucursal_id: destinoNormalizado,
-      sucursal_nombre: sucursales[destinoNormalizado].nombre,
-      transferido_a: destinoNormalizado,
-      transferido_desde: pedido.sucursal_id,
-      estado: "pendiente"
-    })
-    .eq("id", id);
-
-  if (error) {
-    alert("No se pudo transferir: " + error.message);
-    return;
-  }
-
-  await cargarPedidos();
 }
 
 async function eliminarPedido(id) {
