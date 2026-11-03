@@ -26,9 +26,117 @@
   margin: 0 !important;
   border-radius: inherit !important;
 }
-</style></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1200px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><a class="flex items-center gap-space-xs" data-path="inicio" href="#"><img alt="Santa Teresita Panadería" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqlliz6q4E1U7idMH7QmCzNZR0SCm8XEOI6g6T2WzxT48L26onbaDt-UPMVN6mlIOxP0jFCU86beEsmJ5WhyyiwZXZ7EXbkpaCj66gpWEqZN99dqMA7moNqMjjFkW13xJCA9aR4iByGXgs7RWNTbl165deMwBDFTT8CZ8I6YUg0zGU93YATkYogbQKX3oM6ZQbw8tDjlDxWpz0ADmowj_Z7HzZ3cHkhv9XroddkhDF9QdtxHixa6wlVRmPU5TIJ_SlnnM"><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-none">Santa Teresita</span><span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase">Panadería Artesanal</span></div></a></div><nav class="hidden md:flex items-center gap-space-xs lg:gap-space-md" data-active-classes="bg-primary-container text-on-primary rounded-full font-label-lg text-label-lg px-space-md py-space-xs shadow-sm"><a aria-current="page" class="transition-colors bg-primary-container text-on-primary rounded-full font-label-lg text-label-lg px-space-md py-space-xs shadow-sm" data-path="inicio" href="#">Inicio</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="productos" href="#catalogo">Carta &amp; Especiales</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="promociones" href="#catalogo" onclick="filtrarPorCategoria('especiales')">Promociones</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="nosotros" href="#nosotros">Nosotros</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="contacto" href="#sucursales-selector">Sucursales</a></nav><div class="flex items-center gap-space-sm"><a class="inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary px-space-md py-space-xs rounded-full shadow-[0_4px_12px_rgba(123,27,41,0.2)] transition-all cursor-pointer" data-path="pedido" onclick="abrirCarrito()"><span class="material-symbols-outlined text-[18px]">shopping_bag</span><span class="font-label-lg text-label-lg">Ver mi pedido</span><span class="bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm px-space-xs py-0.5 rounded-full font-bold" id="badge-pedido-header">(0)</span></a></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-20rem)]"><div class="flex flex-col w-full selection:bg-secondary-fixed selection:text-on-secondary-fixed"><!-- HERO SENCILLO Y ELEGANTE -->
-<section class="w-full py-space-2xl md:py-space-3xl" id="inicio"><div class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop"><div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center"><div class="lg:col-span-7 flex flex-col items-start gap-space-sm"><div class="inline-flex items-center gap-space-2xs bg-secondary-container/20 text-on-secondary-container px-space-md py-1 rounded-full text-label-sm font-semibold border border-secondary-container/30"><span class="material-symbols-outlined text-[16px] text-secondary">workspace_premium</span><span class="">Desde 1952 • Tradición &amp; Pasión Artesanal</span></div><div class="space-y-1"><h1 class="font-headline-lg md:font-display-lg text-primary font-bold leading-tight">Panadería Santa Teresita</h1><p class="font-headline-sm italic text-secondary font-medium">Horneando con amor desde la madrugada</p></div><p class="font-body-lg text-on-surface-variant max-w-lg leading-relaxed">El auténtico sabor del pan casero, palmeritas crocantes y delicias recién horneadas, directo a tu mesa. Seleccioná tu sucursal más cercana y descubrí los especiales del día.</p><div class="flex flex-wrap items-center gap-space-sm pt-space-xs"><a class="inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary px-space-xl py-space-sm rounded-full shadow-[0_4px_12px_rgba(123,27,41,0.2)] hover:shadow-lg transition-all font-label-lg text-label-lg active:scale-95 duration-200 cursor-pointer" href="#sucursales-selector"><span class="material-symbols-outlined text-[20px]">storefront</span><span class="">Elegir Sucursal &amp; Pedir</span></a><a class="inline-flex items-center gap-space-xs bg-surface-container-low hover:bg-surface-container border border-outline-variant/50 text-on-surface px-space-xl py-space-sm rounded-full transition-all font-label-lg text-label-lg shadow-xs cursor-pointer" href="#catalogo"><span class="material-symbols-outlined text-[20px] text-primary">calendar_month</span><span class="">Ver Especiales</span></a></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-space-xs pt-space-md w-full max-w-lg"><div class="flex items-center gap-2 bg-surface-container-low/80 border border-outline-variant/30 rounded-xl px-3 py-2"><span class="material-symbols-outlined text-secondary text-[20px]">local_fire_department</span><div><span class="font-label-sm text-on-surface font-bold block leading-none">Horneadas diarias</span><span class="text-[11px] text-on-surface-variant">07:00 y 16:30 hs</span></div></div><div class="flex items-center gap-2 bg-surface-container-low/80 border border-outline-variant/30 rounded-xl px-3 py-2"><span class="material-symbols-outlined text-secondary text-[20px]">spa</span><div><span class="font-label-sm text-on-surface font-bold block leading-none">100% Masa Madre</span><span class="text-[11px] text-on-surface-variant">Sin conservantes</span></div></div><div class="flex items-center gap-2 bg-surface-container-low/80 border border-outline-variant/30 rounded-xl px-3 py-2"><span class="material-symbols-outlined text-secondary text-[20px]">store</span><div><span class="font-label-sm text-on-surface font-bold block leading-none">3 Sucursales</span><span class="text-[11px] text-on-surface-variant">Retiro inmediato</span></div></div></div></div><div class="lg:col-span-5 relative"><div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-surface-container-low border-2 border-outline-variant/30 group"><img alt="Palmitas y medialunas crocantes recién horneadas de Santa Teresita" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN6lPQYhx1dBtHQ2wWDGtB-fMsFE_uarYV0bZIvRdp92hqeqLCNxZvW5yL3zrVt45v7hCs-CKXH0O54j23pXEELloy1_dD564_rHLxVzPCt8kDJIrMWjPBxU-GELKr0IMuqaMtTyw-fTSOUI7incUT39OzyMDwmD8W3ybpGcEDRPxC2uGSKtDEzOBkzb1Vw9rG1oDRE6GP8PLeoxIIstytlfb2fMkSoEsW-eVo6g7IFSZ5_1IOqjs8uFxE2uqFcgrV1Eo"><div class="absolute top-3 left-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm flex items-center gap-1.5 border border-outline-variant/40"><span class="material-symbols-outlined text-secondary text-[16px]">bakery_dining</span><span class="font-label-sm text-on-surface font-bold tracking-wide uppercase text-[11px]">Recién sacado del horno</span></div><div class="absolute bottom-3 right-3 bg-primary-container/90 backdrop-blur-md text-on-primary px-3 py-1.5 rounded-2xl shadow-md flex items-center gap-2"><span class="material-symbols-outlined text-secondary-container text-[18px]">verified</span><div class="text-left"><span class="font-label-sm block font-bold leading-tight">Receta Tradicional</span><span class="text-[11px] opacity-90 leading-tight block">Masa hojaldrada pura manteca</span></div></div></div></div></div></div></section>
-<!-- SECCIÓN 1: SELECTOR DE SUCURSAL DESTACADO -->
+
+</style></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased">
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <div class="h-20 max-w-[1200px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-sm">
+    <div class="flex items-center gap-space-sm">
+      <a class="flex items-center gap-space-xs" data-path="inicio" href="#">
+        <div class="flex flex-col">
+          <span class="font-headline-sm text-3xl text-primary leading-none">Santa Teresita</span>
+          <span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase"></span>
+        </div>
+      </a>
+    </div>
+    <nav class="hidden md:flex items-center gap-space-xs lg:gap-space-md" data-active-classes="bg-primary-container text-on-primary rounded-full font-label-lg text-label-lg px-space-md py-space-xs shadow-sm">
+      <a aria-current="page" class="transition-colors bg-primary-container text-on-primary rounded-full font-label-lg text-label-lg px-space-md py-space-xs shadow-sm" data-path="inicio" href="#">Inicio</a>
+      <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="productos" href="#catalogo">Carta &amp; Especiales</a>
+      <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="promociones" href="#catalogo" onclick="filtrarPorCategoria('especiales')">Promociones</a>
+      <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="nosotros" href="#nosotros">Nosotros</a>
+      <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface px-space-sm py-space-xs transition-colors" data-path="contacto" href="#sucursales-selector">Sucursales</a>
+    </nav>
+    <div class="flex items-center gap-space-sm">
+      <a class="inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary px-space-md py-space-xs rounded-full shadow-[0_4px_12px_rgba(123,27,41,0.2)] transition-all cursor-pointer" data-path="pedido" onclick="abrirCarrito()">
+        <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+        <!--ACA VA EL TEXTO DEL CARRITO-->
+        <span class="font-label-lg text-label-lg"></span>
+        <span class="bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm px-space-xs py-0.5 rounded-full font-bold" id="badge-pedido-header">(0)</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="w-full pt-20 bg-surface min-h-[calc(100vh-20rem)]">
+  <div class="flex flex-col w-full selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+
+    <!-- HERO SENCILLO Y ELEGANTE -->
+    <section class="w-full py-space-2xl md:py-space-3xl" id="inicio">
+      <div class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+
+          <div class="lg:col-span-7 flex flex-col items-start gap-space-sm">
+            <div class="inline-flex items-center gap-space-2xs bg-secondary-container/20 text-on-secondary-container px-space-md py-1 rounded-full text-label-sm font-semibold border border-secondary-container/30">
+              <span class="material-symbols-outlined text-[16px] text-secondary">workspace_premium</span>
+              <span class="">Desde 1952 • Tradición &amp; Pasión Artesanal</span>
+            </div>
+
+            <div class="space-y-1">
+              <h1 class="font-headline-lg md:font-display-lg text-primary font-bold leading-tight">Panadería Santa Teresita</h1>
+              <p class="font-headline-sm italic text-secondary font-medium">Horneando con amor desde la madrugada</p>
+            </div>
+
+            <p class="font-body-lg text-on-surface-variant max-w-lg leading-relaxed">
+              El auténtico sabor del pan casero, palmeritas crocantes y delicias recién horneadas, directo a tu mesa. Seleccioná tu sucursal más cercana y descubrí los especiales del día.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-space-sm pt-space-xs">
+              <a class="inline-flex items-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary px-space-xl py-space-sm rounded-full shadow-[0_4px_12px_rgba(123,27,41,0.2)] hover:shadow-lg transition-all font-label-lg text-label-lg active:scale-95 duration-200 cursor-pointer" href="#sucursales-selector">
+                <span class="material-symbols-outlined text-[20px]">storefront</span>
+                <span class="">Elegir Sucursal &amp; Pedir</span>
+              </a>
+              <a class="inline-flex items-center gap-space-xs bg-surface-container-low hover:bg-surface-container border border-outline-variant/50 text-on-surface px-space-xl py-space-sm rounded-full transition-all font-label-lg text-label-lg shadow-xs cursor-pointer" href="#catalogo">
+                <span class="material-symbols-outlined text-[20px] text-primary">calendar_month</span>
+                <span class="">Ver Especiales</span>
+              </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-xs pt-space-md w-full max-w-lg">
+
+              <div class="flex items-center gap-2 bg-surface-container-low/80 border border-outline-variant/30 rounded-xl px-3 py-2">
+                <span class="material-symbols-outlined text-secondary text-[20px]">local_fire_department</span>
+                <div>
+                  <span class="font-label-sm text-on-surface font-bold block leading-none">Horneadas diarias</span>
+                  <span class="text-[11px] text-on-surface-variant">07:00 y 16:30 hs</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 bg-surface-container-low/80 border border-outline-variant/30 rounded-xl px-3 py-2">
+                <span class="material-symbols-outlined text-secondary text-[20px]">store</span>
+                <div>
+                  <span class="font-label-sm text-on-surface font-bold block leading-none">3 Sucursales</span>
+                  <span class="text-[11px] text-on-surface-variant">Retiro inmediato</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 relative">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] bg-surface-container-low border-2 border-outline-variant/30 group">
+              <img alt="Palmitas y medialunas crocantes recién horneadas de Santa Teresita" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN6lPQYhx1dBtHQ2wWDGtB-fMsFE_uarYV0bZIvRdp92hqeqLCNxZvW5yL3zrVt45v7hCs-CKXH0O54j23pXEELloy1_dD564_rHLxVzPCt8kDJIrMWjPBxU-GELKr0IMuqaMtTyw-fTSOUI7incUT39OzyMDwmD8W3ybpGcEDRPxC2uGSKtDEzOBkzb1Vw9rG1oDRE6GP8PLeoxIIstytlfb2fMkSoEsW-eVo6g7IFSZ5_1IOqjs8uFxE2uqFcgrV1Eo">
+
+              <div class="absolute top-3 left-3 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm flex items-center gap-1.5 border border-outline-variant/40">
+                <span class="material-symbols-outlined text-secondary text-[16px]">bakery_dining</span>
+                <span class="font-label-sm text-on-surface font-bold tracking-wide uppercase text-[11px]">Recién sacado del horno</span>
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-primary-container/90 backdrop-blur-md text-on-primary px-3 py-1.5 rounded-2xl shadow-md flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary-container text-[18px]">verified</span>
+                <div class="text-left">
+                  <span class="font-label-sm block font-bold leading-tight">Receta Tradicional</span>
+                  <span class="text-[11px] opacity-90 leading-tight block">Masa hojaldrada pura manteca</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 1: SELECTOR DE SUCURSAL DESTACADO -->
+
 <section class="w-full py-space-lg bg-surface-container border-y border-outline-variant/30" id="sucursales-selector">
 <div class="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
@@ -127,6 +235,7 @@
 <div class="flex items-center gap-space-xs overflow-x-auto w-full md:w-auto pb-1 scrollbar-none">
 <button class="cat-filter-btn active-cat whitespace-nowrap px-space-lg py-2 rounded-full font-label-md transition-all bg-primary text-on-primary shadow-sm font-semibold cursor-pointer" id="btn-cat-panaderia" onclick="filtrarPorCategoria('panaderia')">Panadería</button>
 <button class="cat-filter-btn whitespace-nowrap px-space-lg py-2 rounded-full font-label-md transition-all bg-surface-container text-on-surface-variant hover:text-on-surface font-semibold cursor-pointer" id="btn-cat-bebidas" onclick="filtrarPorCategoria('bebidas')">Bebidas</button>
+<button class="cat-filter-btn whitespace-nowrap px-space-lg py-2 rounded-full font-label-md transition-all bg-surface-container text-on-surface-variant hover:text-on-surface font-semibold cursor-pointer" id="btn-cat-almacen" onclick="filtrarPorCategoria('almacen')">Almacén</button>
 <button class="cat-filter-btn whitespace-nowrap px-space-lg py-2 rounded-full font-label-md transition-all bg-surface-container text-on-surface-variant hover:text-on-surface font-semibold cursor-pointer" id="btn-cat-especiales" onclick="filtrarPorCategoria('especiales')">⭐ Especiales</button>
 </div>
 <div class="relative w-full md:w-72">
@@ -1515,6 +1624,13 @@
     { id: 207, nombre: "Monster Ultra Watermelon (Roja) 473ml", categoria: "bebidas", precio: 3500, unidad: "unidad", descripcion: "Monster Ultra Watermelon sabor sandía refrescante 473ml.", imagen: "img/monsterroja.jpg", imageAlt: "Monster Ultra Watermelon (Roja) 473ml", sucursales: ['centro', 'norte', 'pueblo'], badge: "" },
     { id: 208, nombre: "Monster Energy clásica (Negra y Verde) 473ml", categoria: "bebidas", precio: 3500, unidad: "unidad", descripcion: "El sabor clásico e inconfundible de Monster Energy 473ml.", imagen: "img/mosnternegra.jpg", imageAlt: "Monster Energy clásica (Negra y Verde) 473ml", sucursales: ['centro', 'norte', 'pueblo'], badge: "Clásico" },
     { id: 209, nombre: "Cerveza Schneider Lager 473ml", categoria: "bebidas", precio: 2200, unidad: "unidad", descripcion: "Cerveza Schneider Lager rubia clásica en lata de 473ml, bien fría.", imagen: "img/schneider.jpg", imageAlt: "Cerveza Schneider Lager 473ml", sucursales: ['centro', 'norte', 'pueblo'], badge: "Cerveza" },
+  
+    //almacen
+    { id: 400, nombre: "Grissines", categoria: "almacen", precio: 1300, unidad: "unidad", descripcion: "",imagen: "img/grissinopoli.png", sucursales: ['centro'], badge: "Clásico" },
+    { id: 401, nombre: "Grissines sin sal", categoria: "almacen", precio: 1300, unidad: "unidad",imagen: "img/grissinopolisinsal.png", descripcion: "", sucursales: ['centro'], badge: "Clásico" },
+    { id: 402, nombre: "Mini Crackers", categoria: "almacen", precio: 2300, unidad: "unidad", imagen: "img/minicracker.png",descripcion: "", sucursales: ['centro'], badge: "Clásico" },
+
+  
   ];
 
   let carrito = [];
@@ -1678,6 +1794,10 @@
       if (iconSeccion) iconSeccion.textContent = "local_cafe";
       if (tituloSeccion) tituloSeccion.textContent = "Bebidas & Refrescos";
       if (subtituloSeccion) subtituloSeccion.textContent = "Gaseosas, aguas, energizantes y cervezas frías";
+    } else if (categoriaActiva === "almacen") {
+      if (iconSeccion) iconSeccion.textContent = "shopping_basket";
+      if (tituloSeccion) tituloSeccion.textContent = "Productos de Almacén";
+      if (subtituloSeccion) subtituloSeccion.textContent = "Disponibles todos los días";
     } else {
       if (iconSeccion) iconSeccion.textContent = "bakery_dining";
       if (tituloSeccion) tituloSeccion.textContent = "Los Clásicos de Siempre";
@@ -1728,7 +1848,7 @@
 
   function filtrarPorCategoria(categoria) {
     categoriaActiva = categoria;
-    ['panaderia', 'bebidas', 'especiales'].forEach(cat => {
+    ['panaderia', 'bebidas', 'almacen', 'especiales'].forEach(cat => {
       const btn = document.getElementById(`btn-cat-${cat}`);
       if (btn) {
         if (cat === categoria) {
